@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交通灯</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            width: 180px;
+            background-color: #999;
+            border-radius: 45px;
+        }
+
+        .box div {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid #efefef;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <script>
+        const divs = document.querySelector('.box').querySelectorAll('div')
+        // 实现绿灯
+        function toGreen() {
+            divs[0].style.backgroundColor = 'green'
+        }
+        // 实现红灯
+        function toRed() {
+            divs[1].style.backgroundColor = 'red'
+        }
+        // 实现黄灯
+        function toYellow() {
+            divs[2].style.backgroundColor = 'yellow'
+        }
+        // 清除灯
+        function clearColor() {
+            const lists = [...divs]
+            lists.forEach(item => {
+                item.style.backgroundColor = ''
+            })
+        }
+
+        function task(light, timeout) {
+            // clearColor()
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    clearColor()
+                    if (light === 'green') {
+                        toGreen()
+                    } else if (light === 'red') {
+                        toRed()
+                    } else if (light === 'yellow') {
+                        toYellow()
+                    }
+                    resolve()
+                }, timeout)
+            })
+        }
+
+        function step() {
+            task('green', 1000).then(() => {
+                task('yellow', 1000).then(() => {
+                    task('red', 1000).then(() => {
+                        step()
+                    })
+                })
+            })
+        }
+        step()
+
+    </script>
+</body>
+
+</html>
